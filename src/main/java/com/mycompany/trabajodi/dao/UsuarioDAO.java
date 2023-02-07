@@ -5,7 +5,6 @@
 package com.mycompany.trabajodi.dao;
 
 import com.mycompany.trabajodi.model.Usuarios;
-import com.mycompany.trabajodi.util.Conexion;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
