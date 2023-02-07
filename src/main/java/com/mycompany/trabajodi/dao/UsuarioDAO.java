@@ -5,6 +5,7 @@
 package com.mycompany.trabajodi.dao;
 
 import com.mycompany.trabajodi.model.Usuarios;
+import com.mycompany.trabajodi.util.Conexion;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -41,7 +42,7 @@ public class UsuarioDAO {
         return miconexion;
     }
     
-    /*public ResultSet loginUsuario(String usuario, String contrasena) throws NoSuchAlgorithmException {
+    public ResultSet loginUsuario(String usuario, String contrasena) throws NoSuchAlgorithmException {
 
         try {
 
@@ -96,7 +97,7 @@ public class UsuarioDAO {
 
         return resul;
 
-    }*/
+    }
     public void muestraTablaUsuarios(DefaultTableModel modeloTabla) {
 
         try {
