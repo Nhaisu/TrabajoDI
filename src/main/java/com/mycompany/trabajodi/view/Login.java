@@ -4,12 +4,19 @@
  */
 package com.mycompany.trabajodi.view;
 
+import com.mycompany.trabajodi.dao.UsuarioDAO;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author rootcristian
  */
 public class Login extends javax.swing.JFrame {
-
+    
+    private ResultSet resul;
+    //Conexion miconexion;
+    private UsuarioDAO login = new UsuarioDAO();
     /**
      * Creates new form Login
      */
@@ -87,6 +94,41 @@ public class Login extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
+        
+        /*try {
+
+            //Lo guardamos en dos variables
+            String usuario = txtUsuario.getText();
+            String contrasena = txtContraseña.getText();
+
+            resul = login.loginUsuario(usuario, contrasena);
+
+            //System.out.println(resultado);
+            switch (login.getResultado()) {
+                case 1:
+                dispose();
+                //Entrar al Jframe de Administrador
+                Admin admin = new Admin();
+                admin.setVisible(true);
+                break;
+
+                case 2:
+                dispose();
+                Usuario pepe = new Usuario();
+                int id = login.getIdUsuario();
+                System.out.println("Usuario logeado id: "+id);
+                pepe.guardaDatos(id);
+                pepe.setVisible(true);
+                break;
+                default:
+                JOptionPane.showMessageDialog(this, "Introduce unas creedenciales validas", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            }
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+
+        }*/
         dispose();
         Admin admin = new Admin();
         admin.setVisible(true);

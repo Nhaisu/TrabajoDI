@@ -10,11 +10,18 @@ package com.mycompany.trabajodi.view;
  */
 public class Usuario extends javax.swing.JFrame {
 
+    
+    private int idusuario;
+    
     /**
      * Creates new form Uusario
      */
     public Usuario() {
         initComponents();
+    }
+    public void guardaDatos(int idUsuario) {
+        idusuario = idUsuario;
+        System.out.println("Cliente java usuario, " + idusuario);
     }
 
     /**

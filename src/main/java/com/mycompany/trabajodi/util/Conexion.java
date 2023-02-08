@@ -15,13 +15,13 @@ import java.sql.SQLException;
 public class Conexion {
     
     private static Connection conexion;
-    private static final String driver = "com.mysql.jdbc.Driver";
+    private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String url = "jdbc:mysql://188.164.193.188/appevent_grupo4";
     private static final String usuario = "grupo4";
     private static final String contrasena = "#Xkqy7387";
 
     public Conexion() {
-        conexion = null;
+        //conexion = null;
 
         try {
 

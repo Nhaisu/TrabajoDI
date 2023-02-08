@@ -42,22 +42,23 @@ public class UsuarioDAO {
         return miconexion;
     }
     
+    //Metodo que logea al usuario
     public ResultSet loginUsuario(String usuario, String contrasena) throws NoSuchAlgorithmException {
 
         try {
 
-            
+            //booleano para saber si los datos introducidos son correctos
             Connection prueba = conexion().getConexion();
 
             Statement sentencia = prueba.createStatement();
             String sql = "SELECT Contraseña,esAdmin,Nombre_Usuario,ID FROM cjcl_Usuarios;";
 
-            
+            //Ejecutamos la sentencia
             resul = sentencia.executeQuery(sql);
 
             while (resul.next()) {
 
-                String usuariobbd = resul.getString("Nombre_Usuario");
+                String usuariobbd = resul.getString("Usuario");
                 String contrasenabbd = resul.getString("Contraseña");
 
                 boolean EsAdminbbd = resul.getBoolean("esAdmin");
@@ -75,9 +76,9 @@ public class UsuarioDAO {
                         this.idUsuario = resul.getInt("ID");
 
                     } else {
-                        
-                        System.out.println("Es cliente");
-                        System.out.println("Entrando al JFrame de clientes..");
+                        //Entar al Jframe de Cliente
+                        System.out.println("Es usuario");
+                        System.out.println("Entrando al JFrame de usuario..");
 
                         this.resultado = 2;
 
@@ -98,16 +99,17 @@ public class UsuarioDAO {
         return resul;
 
     }
+    
     public void muestraTablaUsuarios(DefaultTableModel modeloTabla) {
 
         try {
-            //booleano para saber si los datos introducidos son correctos
+            
             Connection prueba = conexion().getConexion();
 
             Statement sentencia = prueba.createStatement();
-            String sql = "SELECT ID,Contraseña,esAdmin,Id_Usuario_Modifica,Fecha_Modifica,Nombre_Usuario FROM cjcl_Usuario";
+            String sql = "SELECT ID,Contraseña,esAdmin,Id_Usuario_Modifica,FechaModifica,Nombre_Usuario FROM cjcl_Usuarios";
 
-            //Ejecutamos la sentencia
+            
             ResultSet rs = sentencia.executeQuery(sql);
 
             while (rs.next()) {
@@ -116,11 +118,10 @@ public class UsuarioDAO {
                 String contraseña = rs.getString("Contraseña");
                 int esAdmin = rs.getInt("esAdmin");
                 int idModifica = rs.getInt("Id_Usuario_Modifica");
-                Date fechaModifica = rs.getDate("Fecha_Modifica");
+                Date fechaModifica = rs.getDate("FechaModifica");
                 String nomUsuario = rs.getString("Nombre_Usuario");
 
-                //Elimina la tabla entera
-                //modeloTabla.setRowCount(0);
+                
                 modeloTabla.addRow(new Object[]{id, contraseña, esAdmin, idModifica, fechaModifica, nomUsuario});
 
             }
@@ -129,5 +130,21 @@ public class UsuarioDAO {
             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    public int getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(int resultado) {
+        this.resultado = resultado;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
