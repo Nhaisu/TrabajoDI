@@ -5,6 +5,11 @@
 package com.mycompany.trabajodi.view;
 
 import com.mycompany.trabajodi.dao.UsuarioDAO;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -51,11 +56,11 @@ public class Admin extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        txtUsuario = new javax.swing.JTextField();
+        txtContraseña = new javax.swing.JTextField();
+        btnAñadirUsuario = new javax.swing.JButton();
+        btnEditarUsuario = new javax.swing.JButton();
+        btnEliminarUsuario = new javax.swing.JButton();
         btnAtrasUsuarios = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
@@ -105,11 +110,16 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel2.setText("Contraseña");
 
-        jButton1.setText("Añadir");
+        btnAñadirUsuario.setText("Añadir");
+        btnAñadirUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAñadirUsuarioActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Editar");
+        btnEditarUsuario.setText("Editar");
 
-        jButton3.setText("Eliminar");
+        btnEliminarUsuario.setText("Eliminar");
 
         btnAtrasUsuarios.setText("Atras");
         btnAtrasUsuarios.addActionListener(new java.awt.event.ActionListener() {
@@ -142,22 +152,22 @@ public class Admin extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(btnAñadirUsuario)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2)
+                                .addComponent(btnEditarUsuario)
                                 .addGap(60, 60, 60))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(22, 22, 22)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(42, 42, 42)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(btnEliminarUsuario)
                                 .addGap(61, 61, 61)
                                 .addComponent(btnAtrasUsuarios)))))
                 .addContainerGap(102, Short.MAX_VALUE))
@@ -169,14 +179,14 @@ public class Admin extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtrasUsuarios)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(btnEliminarUsuario)
+                    .addComponent(btnEditarUsuario)
+                    .addComponent(btnAñadirUsuario))
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -526,6 +536,61 @@ public class Admin extends javax.swing.JFrame {
         login.setVisible(true);
     }//GEN-LAST:event_btnAtrasReservasActionPerformed
 
+    private void btnAñadirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirUsuarioActionPerformed
+        // TODO add your handling code here:
+        try {
+            Date date = new Date();
+
+            long timeInMilliSeconds = date.getTime();
+            java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+
+            int ultimoU = usuarios.ultimoId();
+            
+
+            int idUsuario = ultimoU + 1;
+            
+
+            //Para encriptar la contraseña
+            MessageDigest mensaje;
+            byte[] bytes = txtContraseña.getText().getBytes();
+            mensaje = MessageDigest.getInstance("SHA-256");
+            mensaje.update(bytes);
+            byte[] hash = mensaje.digest();
+
+            System.out.println("Id correspondiente " + idUsuario);
+            //Hacemos un objeto Cliente
+            //0 porque lo que insertamos no son administradores
+            //Creamos el objeto usuario y el objeto cliente
+            Usuario usuario = new Usuario(idUsuario, txtNombre.getText(), txtContraseña.getText(), 0, date1, txtUsuario.getText());
+            
+
+            boolean insertaCliente = usuarios.insertaUsuario(usuario);
+
+            //Si se inserta el usuario correctamente se procede a crear el cliente
+            if (insertaCliente) {
+
+                clientes.insertaCliente(cliente);
+                System.out.println("Usuario creado con exito!");
+
+            }
+
+            System.out.println(usuario.toString());
+
+            //Despues de insertar en la base de datos limpiamos los campos
+            vaciadoCampos();
+
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Refrescamos
+        //Da fallo se repite dos veces
+        modeloTabla.setRowCount(0);
+        iniciarTabla();
+
+    
+    }//GEN-LAST:event_btnAñadirUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -566,12 +631,12 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton btnAtrasCliente;
     private javax.swing.JButton btnAtrasReservas;
     private javax.swing.JButton btnAtrasUsuarios;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAñadirUsuario;
+    private javax.swing.JButton btnEditarUsuario;
+    private javax.swing.JButton btnEliminarUsuario;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -604,8 +669,6 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
@@ -613,5 +676,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTable tblUsuarios;
+    private javax.swing.JTextField txtContraseña;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

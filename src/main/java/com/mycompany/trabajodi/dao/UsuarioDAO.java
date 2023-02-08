@@ -9,6 +9,7 @@ import com.mycompany.trabajodi.util.Conexion;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -100,6 +101,45 @@ public class UsuarioDAO {
 
     }
     
+    public boolean insertaUsuario(Usuarios usuario) {
+
+        try {
+            //Obtenemos la conexión
+            Connection conexion = conexion().getConexion();
+
+            String sql = "INSERT INTO Usuario "
+                    + "(id,Nombre,Contrasena,esAdmin,fechaCreac,Usuario)  VALUES "
+                    + "(?,?,?,?,?,?)";
+
+            //Sentencia preparada 
+            PreparedStatement sentencia = conexion.prepareStatement(sql);
+
+            sentencia.setInt(1, usuario.getId());
+            sentencia.setString(2, usuario.getNombre());
+            sentencia.setString(3, usuario.getContraseña());
+            sentencia.setInt(4, usuario.isEsAdmin());
+            sentencia.setDate(5, usuario.getFechaModifica());
+            sentencia.setString(6, usuario.getNombre());
+
+            sentencia.execute();
+
+            sentencia.close();
+            //se desconecta de la base de datos
+            miconexion.desconectar();
+            //Se ha insertado un cliente
+            System.out.println("Insertado con exito el usuario");
+            return true;
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+
+            //No se ha podido añadir usuario
+            return false;
+        }
+
+    }
+    
     public void muestraTablaUsuarios(DefaultTableModel modeloTabla) {
 
         try {
@@ -128,6 +168,37 @@ public class UsuarioDAO {
 
         } catch (SQLException ex) {
             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public int ultimoId() {
+
+        int numUlt = 0;
+
+        try {
+            //Obtenemos la conexión
+            Connection conexion = conexion().getConexion();
+
+            Statement sentencia = conexion.createStatement();
+            //Consulta solo para los is de los usuarios
+            String sql = "SELECT ID FROM cjcl_Usuarios";
+
+            resul = sentencia.executeQuery(sql);
+
+            while (resul.next()) {
+
+                if (resul.getInt("id") > numUlt) {
+
+                    numUlt = resul.getInt("id");
+
+                }
+            }
+
+            return numUlt;
+        } catch (SQLException ex) {
+            System.out.println("Error a obtener el último usuario");
+            return -1;
         }
 
     }

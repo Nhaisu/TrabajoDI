@@ -57,7 +57,7 @@ public class Usuarios {
         this.contraseña = contraseña;
     }
 
-    public int getEsAdmin() {
+    public int isEsAdmin() {
         return esAdmin;
     }
 
