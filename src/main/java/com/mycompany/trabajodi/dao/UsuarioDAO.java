@@ -58,7 +58,7 @@ public class UsuarioDAO {
 
             while (resul.next()) {
 
-                String usuariobbd = resul.getString("Usuario");
+                String usuariobbd = resul.getString("Nombre_Usuario");
                 String contrasenabbd = resul.getString("Contraseña");
 
                 boolean EsAdminbbd = resul.getBoolean("esAdmin");

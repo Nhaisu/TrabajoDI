@@ -95,7 +95,7 @@ public class Login extends javax.swing.JFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
         
-        /*try {
+        try {
 
             //Lo guardamos en dos variables
             String usuario = txtUsuario.getText();
@@ -128,10 +128,7 @@ public class Login extends javax.swing.JFrame {
 
             System.out.println(e.getMessage());
 
-        }*/
-        dispose();
-        Admin admin = new Admin();
-        admin.setVisible(true);
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
