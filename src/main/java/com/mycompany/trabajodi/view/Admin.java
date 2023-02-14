@@ -5,6 +5,7 @@
 package com.mycompany.trabajodi.view;
 
 import com.mycompany.trabajodi.dao.UsuarioDAO;
+import com.mycompany.trabajodi.model.Usuarios;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -561,23 +562,12 @@ public class Admin extends javax.swing.JFrame {
             //Hacemos un objeto Cliente
             //0 porque lo que insertamos no son administradores
             //Creamos el objeto usuario y el objeto cliente
-            Usuario usuario = new Usuario(idUsuario, txtNombre.getText(), txtContraseña.getText(), 0, date1, txtUsuario.getText());
+            Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), 0, date1,1);
             
 
             boolean insertaCliente = usuarios.insertaUsuario(usuario);
 
-            //Si se inserta el usuario correctamente se procede a crear el cliente
-            if (insertaCliente) {
-
-                clientes.insertaCliente(cliente);
-                System.out.println("Usuario creado con exito!");
-
-            }
-
             System.out.println(usuario.toString());
-
-            //Despues de insertar en la base de datos limpiamos los campos
-            vaciadoCampos();
 
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);

@@ -107,8 +107,8 @@ public class UsuarioDAO {
             //Obtenemos la conexión
             Connection conexion = conexion().getConexion();
 
-            String sql = "INSERT INTO Usuario "
-                    + "(id,Nombre,Contrasena,esAdmin,fechaCreac,Usuario)  VALUES "
+            String sql = "INSERT INTO cjcl_Usuarios "
+                    + "(ID,Nombre_Usuario,Contraseña,esAdmin,FechaModifica,Id_Usuario_Modifica)  VALUES "
                     + "(?,?,?,?,?,?)";
 
             //Sentencia preparada 
@@ -119,7 +119,7 @@ public class UsuarioDAO {
             sentencia.setString(3, usuario.getContraseña());
             sentencia.setInt(4, usuario.isEsAdmin());
             sentencia.setDate(5, usuario.getFechaModifica());
-            sentencia.setString(6, usuario.getNombre());
+            sentencia.setInt(6, usuario.getIdUsuarioModifica());
 
             sentencia.execute();
 
