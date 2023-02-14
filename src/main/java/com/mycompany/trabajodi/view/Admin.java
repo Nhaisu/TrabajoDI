@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,6 +26,8 @@ public class Admin extends javax.swing.JFrame {
     private UsuarioDAO usuarios = new UsuarioDAO();
     
     DefaultTableModel modeloTabla = new DefaultTableModel();
+    
+    int idUsuario = usuarios.getIdUsuario();
     
     public Admin() {
         initComponents();
@@ -119,8 +122,18 @@ public class Admin extends javax.swing.JFrame {
         });
 
         btnEditarUsuario.setText("Editar");
+        btnEditarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarUsuarioActionPerformed(evt);
+            }
+        });
 
         btnEliminarUsuario.setText("Eliminar");
+        btnEliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarUsuarioActionPerformed(evt);
+            }
+        });
 
         btnAtrasUsuarios.setText("Atras");
         btnAtrasUsuarios.addActionListener(new java.awt.event.ActionListener() {
@@ -580,6 +593,53 @@ public class Admin extends javax.swing.JFrame {
 
     
     }//GEN-LAST:event_btnAñadirUsuarioActionPerformed
+
+    private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
+        // TODO add your handling code here:
+        int mensaje = JOptionPane.showConfirmDialog(this, "¿Quieres confirmar los cambios realizados?");
+        
+        if (mensaje == 0) {
+
+            Date date = new Date();
+
+            long timeInMilliSeconds = date.getTime();
+            java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+
+            int fila = tblUsuarios.getSelectedRow();
+
+            int Idusuario = (int) modeloTabla.getValueAt(fila, 0);
+
+            Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), 0, date1, 1);
+            
+            usuarios.editarUsuario(usuario, Idusuario);
+            
+            System.out.println("Usuario editado");
+            System.out.println(usuario.toString());
+
+        }
+        modeloTabla.setRowCount(0);
+        iniciarTabla();
+    }//GEN-LAST:event_btnEditarUsuarioActionPerformed
+
+    private void btnEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuarioActionPerformed
+        // TODO add your handling code here:
+        int mensaje = JOptionPane.showConfirmDialog(this, "¿Quieres eliminar este usuario?");
+
+        if (mensaje == 0) {
+
+            //Fila
+            int fila = tblUsuarios.getSelectedRow();
+
+            //id de usuario
+            int usuario = (int) modeloTabla.getValueAt(fila, 0);
+
+            usuarios.eliminarUsuario(usuario);
+
+            modeloTabla.setRowCount(0);
+            iniciarTabla();
+
+        }
+    }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments

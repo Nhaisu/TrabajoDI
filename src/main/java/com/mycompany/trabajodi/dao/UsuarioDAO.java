@@ -139,6 +139,60 @@ public class UsuarioDAO {
         }
 
     }
+    public boolean editarUsuario(Usuarios usuario, int id) {
+
+        try {
+            //Obtenemos la conexión
+            Connection conexion = conexion().getConexion();
+
+            String sql = "UPDATE cjcl_Usuarios SET Nombre_Usuario = ? ,Contraseña = ?,FechaModifica = ?,Id_Usuario_Modifica = ? WHERE ID = ? ";
+            //Sentencia preparada
+            PreparedStatement sentencia = conexion.prepareStatement(sql);
+
+            sentencia.setString(1, usuario.getNombre());
+            sentencia.setString(2, usuario.getContraseña());
+            sentencia.setDate(3, usuario.getFechaModifica());
+            sentencia.setInt(4, usuario.getIdUsuarioModifica());
+
+            sentencia.setInt(5, id);
+
+            sentencia.executeUpdate();
+
+            sentencia.close();
+            miconexion.desconectar();
+            return true;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+    }
+    
+    public boolean eliminarUsuario(int id) {
+
+        try {
+            //Obtenemos la conexión
+            Connection conexion = conexion().getConexion();
+
+            String sql = "DELETE FROM cjcl_Usuarios WHERE ID = ? ";
+
+            //Sentencia preparada
+            PreparedStatement sentencia = conexion.prepareStatement(sql);
+            sentencia.setInt(1, id);
+            sentencia.execute();
+
+            //se desconecta de la base de datos
+            miconexion.desconectar();
+
+            return true;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+    }
     
     public void muestraTablaUsuarios(DefaultTableModel modeloTabla) {
 
