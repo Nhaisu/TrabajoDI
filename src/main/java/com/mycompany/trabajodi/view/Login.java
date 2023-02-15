@@ -17,6 +17,7 @@ public class Login extends javax.swing.JFrame {
     private ResultSet resul;
     //Conexion miconexion;
     private UsuarioDAO login = new UsuarioDAO();
+    
     /**
      * Creates new form Login
      */
@@ -99,23 +100,28 @@ public class Login extends javax.swing.JFrame {
 
             //Lo guardamos en dos variables
             String usuario = txtUsuario.getText();
-            String contrasena = txtContraseña.getText();
+            String contraseña = txtContraseña.getText();
 
-            resul = login.loginUsuario(usuario, contrasena);
+            resul = login.loginUsuario(usuario, contraseña);
 
             //System.out.println(resultado);
+            
             switch (login.getResultado()) {
+                
                 case 1:
                 dispose();
                 //Entrar al Jframe de Administrador
                 Admin admin = new Admin();
                 admin.setVisible(true);
+                int id = login.getIdUsuario();
+                System.out.println("Usuario logeado id: "+id);
+                admin.guardaDatos(id);
                 break;
 
                 case 2:
                 dispose();
                 Usuario pepe = new Usuario();
-                int id = login.getIdUsuario();
+                id = login.getIdUsuario();
                 System.out.println("Usuario logeado id: "+id);
                 pepe.guardaDatos(id);
                 pepe.setVisible(true);

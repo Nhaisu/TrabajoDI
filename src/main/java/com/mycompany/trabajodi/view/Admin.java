@@ -28,11 +28,18 @@ public class Admin extends javax.swing.JFrame {
     DefaultTableModel modeloTabla = new DefaultTableModel();
     
     int idUsuario = usuarios.getIdUsuario();
+    private int idmod;
+    private int esAd;
     
     public Admin() {
         initComponents();
         this.setLocationRelativeTo(null);
         iniciarTabla();
+    }
+    
+    public void guardaDatos(int idUsuario) {
+        idmod = idUsuario;
+        System.out.println("admin java usuario, " + idmod);
     }
     
     public void iniciarTabla() {
@@ -68,6 +75,7 @@ public class Admin extends javax.swing.JFrame {
         btnAtrasUsuarios = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
+        cbxAd = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -155,35 +163,42 @@ public class Admin extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblUsuarios);
 
+        cbxAd.setText("esAdmin");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnAñadirUsuario)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnEditarUsuario)
-                                .addGap(60, 60, 60))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(22, 22, 22)
-                                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(42, 42, 42)
-                                .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnEliminarUsuario)
-                                .addGap(61, 61, 61)
-                                .addComponent(btnAtrasUsuarios)))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnAñadirUsuario)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnEditarUsuario)
+                                        .addGap(60, 60, 60))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(22, 22, 22)
+                                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(42, 42, 42)
+                                        .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnEliminarUsuario)
+                                        .addGap(61, 61, 61)
+                                        .addComponent(btnAtrasUsuarios))))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(269, 269, 269)
+                        .addComponent(cbxAd)))
                 .addContainerGap(102, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -195,7 +210,9 @@ public class Admin extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbxAd)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtrasUsuarios)
                     .addComponent(btnEliminarUsuario)
@@ -552,6 +569,11 @@ public class Admin extends javax.swing.JFrame {
 
     private void btnAñadirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirUsuarioActionPerformed
         // TODO add your handling code here:
+        if(cbxAd.isSelected()){
+            esAd = 1;
+        }else{
+            esAd = 0;
+        }
         try {
             Date date = new Date();
 
@@ -575,7 +597,7 @@ public class Admin extends javax.swing.JFrame {
             //Hacemos un objeto Cliente
             //0 porque lo que insertamos no son administradores
             //Creamos el objeto usuario y el objeto cliente
-            Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), 0, date1,1);
+            Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), esAd, date1,idmod);
             
 
             boolean insertaCliente = usuarios.insertaUsuario(usuario);
@@ -609,7 +631,7 @@ public class Admin extends javax.swing.JFrame {
 
             int Idusuario = (int) modeloTabla.getValueAt(fila, 0);
 
-            Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), 0, date1, 1);
+            Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), esAd, date1, idmod);
             
             usuarios.editarUsuario(usuario, Idusuario);
             
@@ -684,6 +706,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton btnAñadirUsuario;
     private javax.swing.JButton btnEditarUsuario;
     private javax.swing.JButton btnEliminarUsuario;
+    private javax.swing.JCheckBox cbxAd;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton14;
