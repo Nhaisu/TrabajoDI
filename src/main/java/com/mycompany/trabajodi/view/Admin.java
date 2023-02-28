@@ -4,7 +4,9 @@
  */
 package com.mycompany.trabajodi.view;
 
+import com.mycompany.trabajodi.dao.ClientesDAO;
 import com.mycompany.trabajodi.dao.UsuarioDAO;
+import com.mycompany.trabajodi.model.Clientes;
 import com.mycompany.trabajodi.model.Usuarios;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,9 +27,14 @@ public class Admin extends javax.swing.JFrame {
      */
     private UsuarioDAO usuarios = new UsuarioDAO();
     
+    private ClientesDAO clientes = new ClientesDAO();
+    
     DefaultTableModel modeloTabla = new DefaultTableModel();
+    DefaultTableModel modeloTablaCliente = new DefaultTableModel();
     
     int idUsuario = usuarios.getIdUsuario();
+    int idCliente = clientes.getIdCliente();
+    
     private int idmod;
     private int esAd;
     
@@ -35,6 +42,7 @@ public class Admin extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         iniciarTabla();
+        iniciarTablaClientes();
     }
     
     public void guardaDatos(int idUsuario) {
@@ -52,6 +60,16 @@ public class Admin extends javax.swing.JFrame {
         //Le insertamos el modelo a al tabla
         tblUsuarios.setModel(modeloTabla);
 
+    }
+    
+    public void iniciarTablaClientes(){
+        //Cabeceras que tendra la tabla
+        modeloTablaCliente.setColumnIdentifiers(new String[]{"Id Cliente", "ID Usuario", "Fecha Modificación", "Nombre", "Apellido", "DNI", "Localidad"});
+
+        clientes.muestraTablaClientes(modeloTablaCliente);
+
+        //Le insertamos el modelo a al tabla
+        jTableCliente.setModel(modeloTablaCliente);
     }
 
     /**
@@ -91,18 +109,18 @@ public class Admin extends javax.swing.JFrame {
         btnAtrasClases = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTableCliente = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
+        txtNombreCliente = new javax.swing.JTextField();
+        txtApellidoCliente = new javax.swing.JTextField();
+        txtLocalidadCliente = new javax.swing.JTextField();
+        txtDNICliente = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
+        btnAñadirCliente = new javax.swing.JButton();
+        btnEditarCliente = new javax.swing.JButton();
+        btnEliminarCliente = new javax.swing.JButton();
         btnAtrasCliente = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -323,7 +341,7 @@ public class Admin extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Clases", jPanel2);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jTableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -334,7 +352,7 @@ public class Admin extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(jTableCliente);
 
         jLabel6.setText("Nombre");
 
@@ -344,11 +362,26 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel9.setText("Localidad");
 
-        jButton9.setText("Añadir");
+        btnAñadirCliente.setText("Añadir");
+        btnAñadirCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAñadirClienteActionPerformed(evt);
+            }
+        });
 
-        jButton10.setText("Editar");
+        btnEditarCliente.setText("Editar");
+        btnEditarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarClienteActionPerformed(evt);
+            }
+        });
 
-        jButton11.setText("Eliminar");
+        btnEliminarCliente.setText("Eliminar");
+        btnEliminarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarClienteActionPerformed(evt);
+            }
+        });
 
         btnAtrasCliente.setText("Atras");
         btnAtrasCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -365,9 +398,9 @@ public class Admin extends javax.swing.JFrame {
                 .addGap(81, 81, 81)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton9)
+                        .addComponent(btnAñadirCliente)
                         .addGap(62, 62, 62)
-                        .addComponent(jButton10)
+                        .addComponent(btnEditarCliente)
                         .addGap(185, 185, 185)
                         .addComponent(btnAtrasCliente)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -380,10 +413,10 @@ public class Admin extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(jTextField5))
+                                        .addComponent(txtNombreCliente))
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(jTextField8)))
+                                        .addComponent(txtDNICliente)))
                                 .addGap(86, 86, 86)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -394,11 +427,11 @@ public class Admin extends javax.swing.JFrame {
                                         .addGap(39, 39, 39))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton11)
+                                .addComponent(btnEliminarCliente)
                                 .addGap(39, 39, 39)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                            .addComponent(jTextField7))
+                            .addComponent(txtApellidoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                            .addComponent(txtLocalidadCliente))
                         .addGap(53, 53, 53))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -410,23 +443,23 @@ public class Admin extends javax.swing.JFrame {
                 .addGap(34, 34, 34)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellidoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel9)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtLocalidadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel8)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtDNICliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtrasCliente)
-                    .addComponent(jButton11)
-                    .addComponent(jButton10)
-                    .addComponent(jButton9))
+                    .addComponent(btnEliminarCliente)
+                    .addComponent(btnEditarCliente)
+                    .addComponent(btnAñadirCliente))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -594,8 +627,6 @@ public class Admin extends javax.swing.JFrame {
             byte[] hash = mensaje.digest();
 
             System.out.println("Id correspondiente " + idUsuario);
-            //Hacemos un objeto Cliente
-            //0 porque lo que insertamos no son administradores
             //Creamos el objeto usuario y el objeto cliente
             Usuarios usuario = new Usuarios(idUsuario, txtUsuario.getText(), txtContraseña.getText(), esAd, date1,idmod);
             
@@ -609,7 +640,6 @@ public class Admin extends javax.swing.JFrame {
         }
 
         //Refrescamos
-        //Da fallo se repite dos veces
         modeloTabla.setRowCount(0);
         iniciarTabla();
 
@@ -663,6 +693,96 @@ public class Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
 
+    private void btnAñadirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirClienteActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            Date date = new Date();
+
+            long timeInMilliSeconds = date.getTime();
+            java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+
+            int ultimoC = clientes.ultimoId();
+            
+
+            int idCliente = ultimoC + 1;
+            
+
+            //Para encriptar la contraseña
+            MessageDigest mensaje;
+            byte[] bytes = txtContraseña.getText().getBytes();
+            mensaje = MessageDigest.getInstance("SHA-256");
+            mensaje.update(bytes);
+            byte[] hash = mensaje.digest();
+
+            System.out.println("Id correspondiente " + idCliente);
+            //Creamos el objeto usuario y el objeto cliente
+            Clientes cliente = new Clientes(idCliente, idmod, date1, txtNombreCliente.getText(), txtApellidoCliente.getText(),txtDNICliente.getText(),txtLocalidadCliente.getText());
+            
+
+            boolean insertaCliente = clientes.insertarCliente(cliente);
+
+            System.out.println(cliente.toString());
+
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Refrescamos
+        modeloTablaCliente.setRowCount(0);
+        iniciarTablaClientes();
+
+    
+    }//GEN-LAST:event_btnAñadirClienteActionPerformed
+
+    private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
+        // TODO add your handling code here:
+        int mensaje = JOptionPane.showConfirmDialog(this, "¿Quieres eliminar este usuario?");
+
+        if (mensaje == 0) {
+
+            //Fila
+            int fila = jTableCliente.getSelectedRow();
+
+            //id de usuario
+            int cliente = (int) modeloTablaCliente.getValueAt(fila, 0);
+
+            clientes.eliminarCliente(cliente);
+
+            modeloTablaCliente.setRowCount(0);
+            iniciarTablaClientes();
+
+        }
+    }//GEN-LAST:event_btnEliminarClienteActionPerformed
+
+    private void btnEditarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarClienteActionPerformed
+        // TODO add your handling code here:
+        int mensaje = JOptionPane.showConfirmDialog(this, "¿Quieres confirmar los cambios realizados?");
+        
+        if (mensaje == 0) {
+
+            Date date = new Date();
+
+            long timeInMilliSeconds = date.getTime();
+            java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+
+            int fila = jTableCliente.getSelectedRow();
+
+            int Idcliente = (int) modeloTablaCliente.getValueAt(fila, 0);
+
+            Clientes cliente = new Clientes(idCliente, idmod, date1, txtNombreCliente.getText(), txtApellidoCliente.getText(), txtDNICliente.getText(), txtLocalidadCliente.getText());
+            
+            clientes.editarCliente(cliente, Idcliente);
+            
+            System.out.println("Usuario editado");
+            System.out.println(cliente.toString());
+
+        }
+        modeloTablaCliente.setRowCount(0);
+        iniciarTablaClientes();
+        
+    }//GEN-LAST:event_btnEditarClienteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -703,17 +823,17 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton btnAtrasCliente;
     private javax.swing.JButton btnAtrasReservas;
     private javax.swing.JButton btnAtrasUsuarios;
+    private javax.swing.JButton btnAñadirCliente;
     private javax.swing.JButton btnAñadirUsuario;
+    private javax.swing.JButton btnEditarCliente;
     private javax.swing.JButton btnEditarUsuario;
+    private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnEliminarUsuario;
     private javax.swing.JCheckBox cbxAd;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
@@ -741,15 +861,15 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTableCliente;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JTable tblUsuarios;
+    private javax.swing.JTextField txtApellidoCliente;
     private javax.swing.JTextField txtContraseña;
+    private javax.swing.JTextField txtDNICliente;
+    private javax.swing.JTextField txtLocalidadCliente;
+    private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
