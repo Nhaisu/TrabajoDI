@@ -4,12 +4,16 @@
  */
 package com.mycompany.trabajodi.view;
 
+import com.mycompany.trabajodi.dao.ClasesDAO;
 import com.mycompany.trabajodi.dao.ClientesDAO;
 import com.mycompany.trabajodi.dao.UsuarioDAO;
+import com.mycompany.trabajodi.model.Clases;
 import com.mycompany.trabajodi.model.Clientes;
 import com.mycompany.trabajodi.model.Usuarios;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,11 +33,15 @@ public class Admin extends javax.swing.JFrame {
     
     private ClientesDAO clientes = new ClientesDAO();
     
+    private ClasesDAO clases = new ClasesDAO();
+    
     DefaultTableModel modeloTabla = new DefaultTableModel();
     DefaultTableModel modeloTablaCliente = new DefaultTableModel();
+    DefaultTableModel modeloTablaClase = new DefaultTableModel();
     
     int idUsuario = usuarios.getIdUsuario();
     int idCliente = clientes.getIdCliente();
+    int idClase = clases.getIdClase();
     
     private int idmod;
     private int esAd;
@@ -43,6 +51,7 @@ public class Admin extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         iniciarTabla();
         iniciarTablaClientes();
+        iniciarTablaClases();
     }
     
     public void guardaDatos(int idUsuario) {
@@ -71,6 +80,16 @@ public class Admin extends javax.swing.JFrame {
         //Le insertamos el modelo a al tabla
         jTableCliente.setModel(modeloTablaCliente);
     }
+    
+    public void iniciarTablaClases(){
+        //Cabeceras que tendra la tabla
+        modeloTablaClase.setColumnIdentifiers(new String[]{"Id Clase", "ID Usuario", "Nombre", "Fecha creacion", "Fecha", "Maximo asistentes"});
+
+        clases.muestraTablaClases(modeloTablaClase);
+
+        //Le insertamos el modelo a al tabla
+        jtableClases.setModel(modeloTablaClase);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,15 +117,15 @@ public class Admin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField4 = new javax.swing.JTextField();
+        txtNombreClase = new javax.swing.JTextField();
+        txtAsistentes = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        jtableClases = new javax.swing.JTable();
+        btnAñadirClase = new javax.swing.JButton();
+        btnEditarClase = new javax.swing.JButton();
+        btnEliminarClase = new javax.swing.JButton();
         btnAtrasClases = new javax.swing.JButton();
+        txtFechaClase = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableCliente = new javax.swing.JTable();
@@ -245,13 +264,11 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel3.setText("Nombre");
 
-        jLabel4.setText("Dia y hora");
+        jLabel4.setText("Dia");
 
         jLabel5.setText("Maximo de asistentes");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jtableClases.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -262,13 +279,23 @@ public class Admin extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(jtableClases);
 
-        jButton5.setText("Añadir");
+        btnAñadirClase.setText("Añadir");
+        btnAñadirClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAñadirClaseActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Editar");
+        btnEditarClase.setText("Editar");
 
-        jButton7.setText("Eliminar");
+        btnEliminarClase.setText("Eliminar");
+        btnEliminarClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarClaseActionPerformed(evt);
+            }
+        });
 
         btnAtrasClases.setText("Atras");
         btnAtrasClases.addActionListener(new java.awt.event.ActionListener() {
@@ -287,28 +314,29 @@ public class Admin extends javax.swing.JFrame {
                         .addGap(79, 79, 79)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton5)
+                                .addComponent(btnAñadirClase)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6)
+                                .addComponent(btnEditarClase)
                                 .addGap(60, 60, 60)
-                                .addComponent(jButton7)
+                                .addComponent(btnEliminarClase)
                                 .addGap(61, 61, 61)
                                 .addComponent(btnAtrasClases))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNombreClase, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(61, 61, 61)
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtFechaClase, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(140, 140, 140)
                                 .addComponent(jLabel5)
                                 .addGap(26, 26, 26)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(90, 90, 90)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -322,18 +350,18 @@ public class Admin extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombreClase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechaClase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtrasClases)
-                    .addComponent(jButton7)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5))
+                    .addComponent(btnEliminarClase)
+                    .addComponent(btnEditarClase)
+                    .addComponent(btnAñadirClase))
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
@@ -783,6 +811,66 @@ public class Admin extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnEditarClienteActionPerformed
 
+    private void btnAñadirClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirClaseActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            Date date = new Date();
+
+            long timeInMilliSeconds = date.getTime();
+            java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+
+            int ultimoC = clases.ultimoId();
+            
+
+            int idClase = ultimoC + 1;
+            
+
+            //Para encriptar la contraseña
+            MessageDigest mensaje;
+            byte[] bytes = txtContraseña.getText().getBytes();
+            mensaje = MessageDigest.getInstance("SHA-256");
+            mensaje.update(bytes);
+            byte[] hash = mensaje.digest();
+
+            System.out.println("Id correspondiente " + idCliente);
+            //Creamos el objeto usuario y el objeto cliente
+            Clases clase = new Clases(idClase, idmod,txtNombreClase.getText(), date1, txtFechaClase.getText() ,Integer.parseInt(txtAsistentes.getText()));
+            
+
+            boolean insertaClase = clases.insertarClase(clase);
+
+            System.out.println(clase.toString());
+
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Refrescamos
+        modeloTablaClase.setRowCount(0);
+        iniciarTablaClases();
+    }//GEN-LAST:event_btnAñadirClaseActionPerformed
+
+    private void btnEliminarClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClaseActionPerformed
+        // TODO add your handling code here:
+        int mensaje = JOptionPane.showConfirmDialog(this, "¿Quieres eliminar este usuario?");
+
+        if (mensaje == 0) {
+
+            //Fila
+            int fila = jtableClases.getSelectedRow();
+
+            //id de usuario
+            int clase = (int) modeloTablaClase.getValueAt(fila, 0);
+
+            clases.eliminarClase(clase);
+
+            modeloTablaClase.setRowCount(0);
+            iniciarTablaClases();
+
+        }
+    }//GEN-LAST:event_btnEliminarClaseActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -823,18 +911,17 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton btnAtrasCliente;
     private javax.swing.JButton btnAtrasReservas;
     private javax.swing.JButton btnAtrasUsuarios;
+    private javax.swing.JButton btnAñadirClase;
     private javax.swing.JButton btnAñadirCliente;
     private javax.swing.JButton btnAñadirUsuario;
+    private javax.swing.JButton btnEditarClase;
     private javax.swing.JButton btnEditarCliente;
     private javax.swing.JButton btnEditarUsuario;
+    private javax.swing.JButton btnEliminarClase;
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnEliminarUsuario;
     private javax.swing.JCheckBox cbxAd;
     private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
@@ -860,15 +947,16 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTableCliente;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable jtableClases;
     private javax.swing.JTable tblUsuarios;
     private javax.swing.JTextField txtApellidoCliente;
+    private javax.swing.JTextField txtAsistentes;
     private javax.swing.JTextField txtContraseña;
     private javax.swing.JTextField txtDNICliente;
+    private javax.swing.JTextField txtFechaClase;
     private javax.swing.JTextField txtLocalidadCliente;
+    private javax.swing.JTextField txtNombreClase;
     private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
